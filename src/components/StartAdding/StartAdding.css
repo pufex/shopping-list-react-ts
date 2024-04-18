@@ -1,0 +1,31 @@
+
+
+.start-adding{
+    height: 7rem;
+    aspect-ratio: 1;
+    background-color: var(--element-color);
+    position: fixed;
+    z-index: 99;
+    bottom: 20px;
+    right: 40px;
+    border-radius: 100%;
+    border: 1px solid var(--outline-color);
+    box-shadow: 0 0 12px var(--outline-color);
+    transition: 300ms transform ease-out;
+}
+
+.start-adding:hover{
+    transform: scale(1.025);
+}
+
+.start-adding:active{
+    transition: 50ms transform ease-out;
+    transform: scale(.975);
+}
+
+.start-adding svg{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

@@ -1,0 +1,50 @@
+.loading-container{
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--background-color);
+}
+
+.loading-header{
+    text-align: center;
+    font-size: 3rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.loading{
+    position: relative;
+    height: 4rem;
+    aspect-ratio: 1;
+    border-radius: 100%;
+    background-image: conic-gradient(
+        rgb(136, 136, 136) 20%,
+        rgb(181, 181, 181) 0%
+    );
+    animation: loading 3000ms linear 0ms infinite
+}   
+
+@keyframes loading{
+    from{
+        transform: rotate(0deg)
+    }
+    from{
+        transform: rotate(-360deg)
+    }
+}
+
+.loading-dial{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 50%;
+    aspect-ratio: 1;
+    border-radius: 100%;
+    background-color: var(--background-color);
+}
+
