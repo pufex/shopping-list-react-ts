@@ -48,6 +48,14 @@
     font-weight: 500;
 }
 
+.btn--resets:hover{
+    filter: brightness(1.25)
+}
+
+.btn--resets:active{
+    filter: brightness(1.5)
+}
+
 .btn--delete-customs{
     background-color: var(--error-color);
     color: var(--text-color-2);

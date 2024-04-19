@@ -5,17 +5,32 @@ import Input from '../../components/Input/Input'
 import { nanoid } from 'nanoid'
 import { Navigate, useNavigate } from 'react-router-dom'
 import InputFile from '../../components/InputFile/InputFile'
+
+type ForInputType = {
+  value: string,
+  isInvalid: boolean,
+}
+
 const AddCustom = (): React.ReactElement => {
 
   let navigate = useNavigate();
 
-  const [name, setName] = useState<string>("");
-  const [price, setPrice] = useState<string>("");
-  const [image, setImage] = useState<string>("");
+  const [name, setName] = useState<ForInputType>({
+    value: "",
+    isInvalid: false,
+  });
+  const [price, setPrice] = useState<ForInputType>({
+    value: "",
+    isInvalid: false,
+  });
+  const [image, setImage] = useState<ForInputType>({
+    value: "",
+    isInvalid: false,
+  });
 
   const handleReaderLoad = (reader: FileReader) => {
     console.log(reader.result)
-    setImage(typeof reader.result == "string" ? reader.result : "");
+    setImage({...image, value: typeof reader.result == "string" ? reader.result : ""});
     reader.removeEventListener("load", () => handleReaderLoad(reader))
   }
 
@@ -25,7 +40,7 @@ const AddCustom = (): React.ReactElement => {
     const reader = new FileReader();
 
     if(!file)
-      setImage("");
+      setImage({...image, value: ""});
     else if (file.size > 100000)
       alert("File size exceeded.");
     else {
@@ -38,11 +53,24 @@ const AddCustom = (): React.ReactElement => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    let shouldReturn = false;
+    if(name.value == ""){
+      setName({...name, isInvalid: true});
+      shouldReturn = true;
+    }else setName({...name, isInvalid: false})
+    if(price.isInvalid || price.value == ""){
+      setPrice({...price, isInvalid: true})
+      shouldReturn = true;
+    }else setName({...name, isInvalid: false})
+
+  
+    if(shouldReturn) return;
+    
     addCustom({
       id: nanoid(),
-      name: name,
-      price: parseFloat(price),
-      image: image,
+      name: name.value,
+      price: parseFloat(price.value),
+      image: image.value ? image.value : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrWjILDKe5i7uXCXEaYIbLdnC9lmOJgs0huLV7UP4_GA&s",
     })
     navigate("/add-product")
   }
@@ -59,15 +87,24 @@ const AddCustom = (): React.ReactElement => {
     <div className='add-custom__wrapper'>
       <Input
         placeholder='Name here'
-        value={name}
-        onChange={(e) => setName(e.target.value)} 
-      >
+        value={name.value}
+        onChange={(e) => setName({...name, value: e.target.value})}
+        isInvalid={name.isInvalid} 
+        errorMessage={"Can't be left empty"}
+        >
         Product's name
       </Input>
       <Input
         placeholder='Price here'
-        value={price}
-        onChange={(e) => setPrice(e.target.value)} 
+        value={price.value}
+        onChange={(e) => {
+          if(!isNaN(parseFloat(e.target.value)))
+            setPrice({isInvalid: false, value: e.target.value})
+          else
+          setPrice({isInvalid: true, value: e.target.value})
+        }}
+        isInvalid={price.isInvalid} 
+        errorMessage={"Invalid price"}
       >
         Product's price
       </Input>
@@ -75,7 +112,7 @@ const AddCustom = (): React.ReactElement => {
 
     <InputFile 
       defaultImage="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrWjILDKe5i7uXCXEaYIbLdnC9lmOJgs0huLV7UP4_GA&s"
-      image={image}
+      image={image.value}
       onChange={handleImageChange}
     />
 

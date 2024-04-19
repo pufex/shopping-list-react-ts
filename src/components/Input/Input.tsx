@@ -6,11 +6,8 @@ type InputProps = {
     value: string,
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
     children?: string,
-    regex?: RegExp,
-    isError?: boolean,
-    onError?: () => void,
+    isInvalid?: boolean,
     errorMessage?: string,
-    required?: boolean,
 }
 
 const Input = ({
@@ -18,11 +15,8 @@ const Input = ({
     value, 
     onChange, 
     children,
-    regex,
-    onError,
-    isError,
-    errorMessage,
-    required,
+    isInvalid,
+    errorMessage
 }:InputProps): React.ReactElement => {
   return <div
     className="input-container"
@@ -32,7 +26,7 @@ const Input = ({
             {children}
         </label>
         {
-            isError
+            isInvalid
                 ? <label className='label label--error'>
                     {
                         errorMessage
@@ -48,14 +42,7 @@ const Input = ({
         type="text" 
         value={value}
         placeholder={placeholder}
-        onChange={(e) => {
-            if(typeof regex != "undefined")
-                if(regex.test(value))
-                    if(typeof onError != "undefined")
-                        onError();
-            onChange(e);
-        }}
-        required={required}
+        onChange={onChange}
     />
   </div>
   
