@@ -14,14 +14,12 @@ const Navbar = () => {
           <div className="nav__logo"></div>
         </Link>
       </div>
-      {/* <div className="nav--right">
+      <div className="nav--right">
         <Link
-          to="/add-product"
-          className="nav__link"
-        >
-          Add to list
-        </Link>
-      </div> */}
+          to="/options"
+          className="nav__link--options"
+        ></Link>
+      </div>
     </div>
   </nav>
 }

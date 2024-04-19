@@ -3,9 +3,14 @@
     max-width: 1000px;
     margin: 0 auto;
     padding-top: 6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-between;
+    min-height: calc(100vh);
 }
 
-.products-dropdown__container{
+.add-product__dropdowns{
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -29,6 +34,10 @@
 
 .btn--revealList:active{
     filter: contrast(2)
+}
+
+.products-dropdown__container{
+    width: 100%;
 }
 
 .products-dropdown__list{
@@ -96,5 +105,26 @@
     color: var(--text-color);
 }
 
+.product__placement-container{
+    min-height: 8rem;
+    display: flex;
+    align-items: center;
+    padding-inline: 2rem;
+    width: 100%;
+    max-width: calc(100% - 8rem);
+}
 
+.product__placement{
+    display: inline;
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.product__placement > a{
+    font: inherit;
+    color: blue;
+    text-decoration: none;
+    margin-left: 0.1rem;
+}
 

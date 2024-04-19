@@ -24,6 +24,7 @@ body.light{
   --text-color: rgb(10, 50, 0);
   --text-color-2: white;
   --outline-color: rgba(0, 70, 0, 0.522);
+  --error-color: rgb(220, 20, 60);
 }
 
 body{

@@ -3,10 +3,13 @@ import StartAdding from '../../components/StartAdding/StartAdding';
 import Checkbox from '../../components/Checkbox/Checkbox';
 import { ImCheckmark } from "react-icons/im";
 import "./List.css"
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { mergeClasses } from '../../utils/mergeClasses';
+import { useOptionsContext } from '../../App';
 
 const List = () => {
+
+  const [reverseControls] = useOptionsContext().reverseControls
 
   const {list, switchItemCheck, removeItem} = useListContext();
   const [hideChecked, setHideChecked] = useState<boolean>(false);
@@ -30,7 +33,13 @@ const List = () => {
     }).
     map((item) => {
       return <li
-        className={mergeClasses("shopping-list__item", toggleRemove ? "toggle-remove" : "")}
+        className={
+          mergeClasses(
+            "shopping-list__item", 
+            toggleRemove ? "toggle-remove" : "", 
+            reverseControls ? "reverse-options" : ""
+          )
+        }
         onClick={() => {
           if(!toggleRemove) return;
           else{
@@ -49,7 +58,7 @@ const List = () => {
               {item.name}
             </span>
             <span className='shopping-list__item-price'>
-              {`${item.price.toFixed(2)} PLN`}
+              {`${typeof item.price == "number" ? item.price.toFixed(2) : "invalid"} PLN`}
             </span>
           </div>
         </div>

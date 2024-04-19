@@ -38,37 +38,17 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    height: 100%;
 }
 
-.nav__link{
-    font-size: 1.5rem;
-    color: var(--text-color);
-    font-weight: 600;
-    text-decoration: none;
-    height: 3rem;
-    padding-inline: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--element-color-2);
-    color: var(--text-color-2);
-    border-radius: 7px;
-    transition: 10ms transform linear;
-    border: 1px solid var(--outline-color);
-    box-shadow: 0 0 5px var(--outline-color);
-}
-
-.nav__link:hover{
-    filter: contrast(1.5);   
-}
-
-.nav__link:active{
-    filter: contrast(1);   
-    transform: scale(0.975);
-    transition: 10ms transform linear;
-    box-shadow: 
-        0 0 5px var(--outline-color),
-        inset -2px 2px 5px var(--outline-color);
+.nav__link--options{
+    height: 60%;
+    aspect-ratio: 1;
+    background-color: transparent;
+    background-position: center;
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-image: url("../../assets/images/gear.svg")
 }
 
 
