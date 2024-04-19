@@ -5,13 +5,15 @@ import { useListContext } from '../../App';
 import type { ListItemType } from '../../App';
 import { FaShoppingCart } from "react-icons/fa";
 import StartCustom from "../../components/StartCustom/StartCustom"
+import { FaSearch } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 import "./AddProduct.css"
 
 const AddProduct = () => {
   
   const availableProducts = useProductsContext();
   const { addItem } = useListContext();
-  const { customs } = useCustomContext();
+  const { customs, removeCustom } = useCustomContext();
 
 
   return <>
@@ -27,6 +29,7 @@ const AddProduct = () => {
           title="Custom products"
           list={customs}
           onChoice={addItem}
+          onDelete={(id: ListItemType["id"]) => removeCustom(id)}
         />
       </section>
       <footer className="product__placement-container">
@@ -44,11 +47,15 @@ type ProductsDropdownProps = {
   title: string,
   list: Pick<ListItemType, "id" | "name" | "image" | "price">[],
   onChoice: (item: ListItemType) => void | boolean,
+  show?: boolean,
+  children?: React.ReactElement[] | React.ReactElement,
+  onDelete?: (id: ListItemType["id"]) => void;
 }
 
-const ProductsDropdown = ({title, list, onChoice}:ProductsDropdownProps): React.ReactElement => {
+const ProductsDropdown = ({title, list, onChoice, onDelete, show}:ProductsDropdownProps): React.ReactElement => {
   
-  const [display, setDisplay] = useState(false);
+  const [display, setDisplay] = useState(show ? show : false);
+  const [search, setSearch] = useState("");
 
   const productsOnList = useListContext().list;
 
@@ -64,47 +71,95 @@ const ProductsDropdown = ({title, list, onChoice}:ProductsDropdownProps): React.
       >
         {title}
       </button>
-      <ul
-        className="products-dropdown__list"
+      <div 
+        className="products-dropdown__content"
         style={{
           display: display ? "flex" : "none",
         }}
       >
-        {
-        
-          list?.map((item) => {
-              return <li
-                className={
-                  productsOnList.some((onList) => onList.id == item.id)
-                    ? 'products-dropdown__item on-list'
-                    : 'products-dropdown__item'
-                }
-                onClick={() => {onChoice({...item, checked: false})}}
-              >
-                <div className="products-dropdown__item--left">
-                  <img 
-                    className="products-dropdown__item-icon"
-                    src={item.image} 
-                    alt={item.name}
-                  />
-                  <span className="products-dropdown__item-title">
-                    {item.name}
-                  </span>
-                  <div className="products-dropdown__indicator products-dropdown__indicator--on-list">
-                    <FaShoppingCart 
-                      color='white'
-                      size={30}
+        <div className='products-dropdown__search-container'>
+          <input 
+            type="text" 
+            value={search} 
+            onChange={(e) => setSearch(e.target.value)} 
+            className="products-dropdown__search"
+            placeholder='Search for an item'
+          />
+          <FaSearch 
+            color="black"
+            size={40
+
+            }
+          />
+        </div>
+        <ul
+          className="products-dropdown__list"
+        >
+          {
+          
+            list?.
+            filter((item) => {
+              if(search == "") return true
+              else{
+                if(
+                  item.name
+                  .toLowerCase()
+                  .includes(search.toLowerCase())
+                ) return true;
+                else return false
+              }
+            }).
+            map((item) => {
+                return <li
+                  className={
+                    productsOnList.some((onList) => onList.id == item.id)
+                      ? 'products-dropdown__item on-list'
+                      : 'products-dropdown__item'
+                  }
+                  onClick={() => {
+                      onChoice({...item, checked: false})
+                  }}
+                >
+                  <div className="products-dropdown__item--left">
+                    <img 
+                      className="products-dropdown__item-icon"
+                      src={item.image} 
+                      alt={item.name}
                     />
+                    <span className="products-dropdown__item-title">
+                      {item.name}
+                    </span>
+                    <div className='products-dropdown__indicators'>
+                      <div className="products-dropdown__indicator products-dropdown__indicator--on-list">
+                        <FaShoppingCart 
+                          color='white'
+                          size={30}
+                        />
+                      </div>
+                      {
+                        onDelete 
+                          ? <div 
+                              className='products-dropdown__indicator products-dropdown__indicator--delete'
+                              onClick={() => onDelete(item.id)}
+                            >
+                              <FaTrash 
+                                color="white"
+                                size={30}
+                              />
+                            </div>
+                          : null
+                      }
+                    </div>
                   </div>
-                </div>
-                <span className='products-dropdown__item-price'>
-                  {`${typeof item.price == "number" ? item.price.toFixed(2) : "invalid"} PLN`}
-                </span>
-              </li>
-          })
-        
-        }
-      </ul>
+                  <span className='products-dropdown__item-price'>
+                    {`${typeof item.price == "number" ? item.price.toFixed(2) : "invalid"} PLN`}
+                  </span>
+                </li>
+            })
+          
+          }
+        </ul>
+      </div>
     </div>
   </>
   

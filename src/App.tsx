@@ -111,7 +111,7 @@ function App() {
 
   const removeCustom = (id: ListItemType["id"]) => {
     let newCustoms = customs.slice();
-    newCustoms = newCustoms.filter((custom) => custom.id == id)
+    newCustoms = newCustoms.filter((custom) => custom.id != id)
     setCustoms(newCustoms)
   }
 
