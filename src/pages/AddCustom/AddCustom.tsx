@@ -5,6 +5,7 @@ import Input from '../../components/Input/Input'
 import { nanoid } from 'nanoid'
 import { Navigate, useNavigate } from 'react-router-dom'
 import InputFile from '../../components/InputFile/InputFile'
+import { useOptionsContext } from '../../App'
 
 type ForInputType = {
   value: string,
@@ -14,6 +15,8 @@ type ForInputType = {
 const AddCustom = (): React.ReactElement => {
 
   let navigate = useNavigate();
+
+  const [redirectToAdds] = useOptionsContext().redirectToAdds
 
   const [name, setName] = useState<ForInputType>({
     value: "",
@@ -72,7 +75,12 @@ const AddCustom = (): React.ReactElement => {
       price: parseFloat(price.value),
       image: image.value ? image.value : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrWjILDKe5i7uXCXEaYIbLdnC9lmOJgs0huLV7UP4_GA&s",
     })
-    navigate("/add-product")
+    if(redirectToAdds)
+      navigate("/add-product")
+    else{
+      setName({value: "", isInvalid: false});
+      setPrice({value: "", isInvalid: false});
+    }
   }
 
   return <form

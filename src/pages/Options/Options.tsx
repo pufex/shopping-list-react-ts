@@ -9,6 +9,8 @@ const Options = (): React.ReactElement => {
 
   const [reverseControls, switchReverseControls] = useOptionsContext().reverseControls
   const [reverseBigPlus, switchReverseBigPlus] = useOptionsContext().reverseBigPlus
+  const [redirectToAdds, switchRedirectToAdds] = useOptionsContext().redirectToAdds
+  
 
   const { removeAllCustoms } = useCustomContext();
   const { removeAllItems } = useListContext();
@@ -35,6 +37,19 @@ const Options = (): React.ReactElement => {
           >
             Reverse add products
           </Checkbox>
+        </ul>
+      </section>
+      <section className="options__options-container">
+        <h1 className="options__list-title">
+          Add Customs
+        </h1>
+        <ul className="options__list">
+            <Checkbox
+              checked={redirectToAdds}
+              onCheck={switchRedirectToAdds}
+            >
+              Redirect on custom creation
+            </Checkbox>
         </ul>
       </section>
       <section className="options__options-container">

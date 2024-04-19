@@ -13,6 +13,8 @@ import { getProducts } from "./api/fetchProducts.ts"
 import { fetchList } from './api/fetchList'
 import { fetchCustoms } from './api/fetchCustoms'
 import { createContext, useContext } from 'react'
+import { getSetting } from './utils/getOptions.ts'
+import { getTheme } from './utils/getTheme.ts'
 
 export type ListItemType = {
   id: number | string,
@@ -28,6 +30,10 @@ type OptionsContextType = {
     () => void
   ],
   reverseBigPlus: [
+    boolean,
+    () => void
+  ],
+  redirectToAdds: [
     boolean,
     () => void
   ]
@@ -87,7 +93,7 @@ export const useCustomContext = () => {
   else return customContext;
 }
 
-type themeTypes = "light" | "dark"
+export type themeTypes = "light" | "dark"
 
 type ThemeContextType = {
   theme: themeTypes,
@@ -107,19 +113,22 @@ function App() {
 
   const [list, setList] = useState<ListItemType[]>(fetchList());
   const [customs, setCustoms] = useState<Omit<ListItemType, "checked">[]>(fetchCustoms());
-  const [theme, switchTheme] = useState<themeTypes>("light")
+  // @ts-expect-error
+  const [theme, switchTheme] = useState<themeTypes>(getTheme() ? getTheme() : "light")
 
   const onThemeSwitch = () => {
     switchTheme(previousTheme => {
       switch(previousTheme){
         case "dark":
+          localStorage.setItem("theme", "light")
           return "light"
         case "light":
+          localStorage.setItem("theme", "dark")
           return "dark"
       }
     })
   }
-  
+
   useEffect(() => {
     const body = document.querySelector<HTMLBodyElement>("body")!
     switch(theme){
@@ -136,8 +145,29 @@ function App() {
     }
   }, [theme])
 
-  const [reverseControls, setReverseControls] = useState<boolean>(false)
-  const [reverseBigPlus, setReverseBigPlus] = useState<boolean>(false)
+  const [reverseControls, setReverseControls] = useState<boolean>(
+    getSetting("reverse-controls", false)
+  )
+
+  useEffect(() => {
+    localStorage.setItem("reverse-controls", JSON.stringify(reverseControls))
+  }, [reverseControls])
+  
+  const [reverseBigPlus, setReverseBigPlus] = useState<boolean>(
+    getSetting("reverse-big-plus", false)
+  )
+
+  useEffect(() => {
+    localStorage.setItem("reverse-big-plus", JSON.stringify(reverseBigPlus))
+  }, [reverseBigPlus])
+
+  const [redirectToAdds, setRedirectToAdds] = useState<boolean>(
+    getSetting("redirect-to-adds", true)
+  )
+
+  useEffect(() => {
+    localStorage.setItem("redirect-to-adds", JSON.stringify(redirectToAdds))
+  }, [redirectToAdds])
 
   const switchReverseControls = () => {
     setReverseControls(previousState => !previousState)
@@ -145,6 +175,10 @@ function App() {
 
   const switchReverseBigPlus = () => {
     setReverseBigPlus(previousState => !previousState)
+  }
+
+  const switchRedirectToAdds = () => {
+    setRedirectToAdds(previousState => !previousState)
   }
 
   useEffect(() => {
@@ -239,6 +273,10 @@ function App() {
           reverseBigPlus: [
             reverseBigPlus,
             switchReverseBigPlus
+          ],
+          redirectToAdds: [
+            redirectToAdds,
+            switchRedirectToAdds
           ]
         }}
       >
