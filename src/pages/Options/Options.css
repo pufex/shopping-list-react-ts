@@ -41,3 +41,19 @@
     gap: 1rem;
     width: 100%;
 }
+
+.btn--resets{
+    height: 4rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.btn--delete-customs{
+    background-color: var(--error-color);
+    color: var(--text-color-2);
+}
+
+.btn--delete-items{
+    background-color: var(--element-color-2);
+    color: var(--text-color-2);
+}

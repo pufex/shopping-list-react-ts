@@ -59,6 +59,7 @@ type ListContextType = {
     addItem: (addedItem: ListItemType) => void | boolean,
     removeItem: (id: ListItemType["id"]) => void | boolean,
     switchItemCheck: (id: ListItemType["id"]) => void,
+    removeAllItems: () => void,
 }
 
 const ListContext = createContext<ListContextType | null>(null);
@@ -74,6 +75,7 @@ type CustomContextType = {
   customs: Omit<ListItemType, "checked">[],
   addCustom: (custom: Omit<ListItemType, "checked">) => void
   removeCustom: (id: ListItemType["id"]) => void,
+  removeAllCustoms: () => void,
 }
 
 const CustomsContext = createContext<CustomContextType | null>(null);
@@ -117,6 +119,22 @@ function App() {
       }
     })
   }
+  
+  useEffect(() => {
+    const body = document.querySelector<HTMLBodyElement>("body")!
+    switch(theme){
+      case "light":
+        if(!body.classList.contains("light"))
+          body.classList.add("light")
+        body.classList.remove("dark")
+        break;
+      case "dark":
+        if(!body.classList.contains("dark"))
+          body.classList.add("dark")
+        body.classList.remove("light")
+        break;
+    }
+  }, [theme])
 
   const [reverseControls, setReverseControls] = useState<boolean>(false)
   const [reverseBigPlus, setReverseBigPlus] = useState<boolean>(false)
@@ -141,6 +159,10 @@ function App() {
     let newCustoms = customs.slice();
     newCustoms = newCustoms.filter((custom) => custom.id != id)
     setCustoms(newCustoms)
+  }
+
+  const removeAllCustoms = () => {
+    setCustoms([]);
   }
 
   useEffect(() => {
@@ -177,21 +199,9 @@ function App() {
     } 
   }
 
-  useEffect(() => {
-    const body = document.querySelector<HTMLBodyElement>("body")!
-    switch(theme){
-      case "light":
-        if(!body.classList.contains("light"))
-          body.classList.add("light")
-        body.classList.remove("dark")
-        break;
-      case "dark":
-        if(!body.classList.contains("dark"))
-          body.classList.add("dark")
-        body.classList.remove("light")
-        break;
-    }
-  }, [theme])
+  const removeAllItems = () => {
+    setList([]);
+  }
 
   const productsQuery = useQuery({
     queryKey: ["products"],
@@ -238,13 +248,15 @@ function App() {
             addItem: addItem,
             removeItem: removeItem,
             switchItemCheck: switchItemCheck,
+            removeAllItems: removeAllItems
           }}
         >
           <CustomsContext.Provider
             value={{
               customs: customs,
               addCustom: addCustom,
-              removeCustom: removeCustom
+              removeCustom: removeCustom,
+              removeAllCustoms: removeAllCustoms
             }}
           >
             <ThemeContext.Provider

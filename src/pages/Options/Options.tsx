@@ -2,11 +2,16 @@ import React from 'react'
 import "./Options.css"
 import Checkbox from '../../components/Checkbox/Checkbox'
 import { useOptionsContext } from '../../App'
+import { useCustomContext } from '../../App'
+import { useListContext } from '../../App'
 
 const Options = (): React.ReactElement => {
 
   const [reverseControls, switchReverseControls] = useOptionsContext().reverseControls
   const [reverseBigPlus, switchReverseBigPlus] = useOptionsContext().reverseBigPlus
+
+  const { removeAllCustoms } = useCustomContext();
+  const { removeAllItems } = useListContext();
 
   return <>
     <main className='options__main'>
@@ -30,6 +35,27 @@ const Options = (): React.ReactElement => {
           >
             Reverse add products
           </Checkbox>
+        </ul>
+      </section>
+      <section className="options__options-container">
+        <h1
+          className="options__list-title"
+        >
+          Resets
+        </h1>
+        <ul className="options__list">
+          <button
+            className="btn btn--resets btn--delete-customs"
+            onClick={removeAllCustoms}
+          >
+            Remove all customs
+          </button>
+          <button
+            className="btn btn--resets btn--delete-items"
+            onClick={removeAllItems}
+          >
+            Remove all items
+          </button>
         </ul>
       </section>
     </main>
