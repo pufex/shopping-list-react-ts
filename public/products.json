@@ -88,5 +88,11 @@
         "name": "tomato",
         "image": "https://pufex.github.io/shopping-list-images/images/tomato.jpg",
         "price": 8.99
+    },
+    {
+        "id": 16,
+        "name": "banana",
+        "image": "https://pufex.github.io/shopping-list-images/images/banana.png",
+        "price": 1
     }
 ]
