@@ -85,10 +85,38 @@ export const useCustomContext = () => {
   else return customContext;
 }
 
+type themeTypes = "light" | "dark"
+
+type ThemeContextType = {
+  theme: themeTypes,
+  switchTheme: () => void
+}
+
+const ThemeContext = createContext<ThemeContextType | null>(null)
+
+export const useThemeContext = () => {
+  const themeContext = useContext(ThemeContext)
+  if(!themeContext)
+    throw Error("Cannot use outside a provider.")
+  else return themeContext
+}
+
 function App() {
 
   const [list, setList] = useState<ListItemType[]>(fetchList());
   const [customs, setCustoms] = useState<Omit<ListItemType, "checked">[]>(fetchCustoms());
+  const [theme, switchTheme] = useState<themeTypes>("light")
+
+  const onThemeSwitch = () => {
+    switchTheme(previousTheme => {
+      switch(previousTheme){
+        case "dark":
+          return "light"
+        case "light":
+          return "dark"
+      }
+    })
+  }
 
   const [reverseControls, setReverseControls] = useState<boolean>(false)
   const [reverseBigPlus, setReverseBigPlus] = useState<boolean>(false)
@@ -149,6 +177,22 @@ function App() {
     } 
   }
 
+  useEffect(() => {
+    const body = document.querySelector<HTMLBodyElement>("body")!
+    switch(theme){
+      case "light":
+        if(!body.classList.contains("light"))
+          body.classList.add("light")
+        body.classList.remove("dark")
+        break;
+      case "dark":
+        if(!body.classList.contains("dark"))
+          body.classList.add("dark")
+        body.classList.remove("light")
+        break;
+    }
+  }, [theme])
+
   const productsQuery = useQuery({
     queryKey: ["products"],
     queryFn: getProducts,
@@ -203,25 +247,32 @@ function App() {
               removeCustom: removeCustom
             }}
           >
-            <Navbar />
-            <Routes>
-              <Route 
-                path="/"
-                element={<List />}
-              />
-              <Route 
-                path="/options"
-                element={<Options />}
-              />
-              <Route 
-                path="/add-product"
-                element={<AddProduct />}
-              />
-              <Route 
-                path="/add-custom"
-                element={<AddCustom />}
-              />
-            </Routes>
+            <ThemeContext.Provider
+              value={{
+                theme: theme,
+                switchTheme: onThemeSwitch
+              }}
+            >
+              <Navbar />
+              <Routes>
+                <Route 
+                  path="/"
+                  element={<List />}
+                />
+                <Route 
+                  path="/options"
+                  element={<Options />}
+                />
+                <Route 
+                  path="/add-product"
+                  element={<AddProduct />}
+                />
+                <Route 
+                  path="/add-custom"
+                  element={<AddCustom />}
+                />
+              </Routes>
+            </ThemeContext.Provider>
           </CustomsContext.Provider>
         </ListContext.Provider>
       </OptionsContext.Provider>

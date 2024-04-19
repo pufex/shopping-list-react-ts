@@ -27,6 +27,18 @@ body.light{
   --error-color: rgb(220, 20, 60);
 }
 
+body.dark{
+  --background-color: rgb(208, 124, 222);
+  --element-color: rgb(138, 30, 192);
+  --element-color-2: rgb(100, 30, 133);
+  --element-color-3: rgb(238, 0, 230);
+  --element-color-4: rgb(251, 157, 250);
+  --text-color: rgb(36, 0, 50);
+  --text-color-2: white;
+  --outline-color: rgba(36, 0, 70, 0.522);
+  --error-color: rgb(220, 20, 60);
+}
+
 body{
   background-color: var(--background-color);
 }
