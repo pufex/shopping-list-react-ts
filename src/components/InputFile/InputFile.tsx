@@ -1,5 +1,4 @@
-import React from 'react'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import "./InputFile.css"
 
 type InputFileProps = {
