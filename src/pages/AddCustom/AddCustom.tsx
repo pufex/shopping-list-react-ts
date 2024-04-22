@@ -3,7 +3,7 @@ import "./AddCustom.css"
 import { useCustomContext } from '../../App'
 import Input from '../../components/Input/Input'
 import { nanoid } from 'nanoid'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import InputFile from '../../components/InputFile/InputFile'
 import { useOptionsContext } from '../../App'
 
