@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import { GiCheckMark } from "react-icons/gi";
 import "./Checkbox.css"
 
